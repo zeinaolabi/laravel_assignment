@@ -91,9 +91,17 @@ class exercisesController extends Controller
     }
 
     function getBinaryForm($string){
-        preg_match_all('!\d+!', $string, $matches);
-        var_dump(decbin($matches[0][0]));
+        $binaryForm = $string;
+        preg_match_all('!\d+!', $binaryForm, $matches);
 
+        for($i = 0; $i < count($matches[0]); $i++){
+            $binaryForm = str_replace($matches[0][$i], decbin($matches[0][$i]), $binaryForm);
+        }
+
+        return response()->json([
+            "number" => $string,
+            "digits" => $binaryForm
+        ]);
     }
 
 
