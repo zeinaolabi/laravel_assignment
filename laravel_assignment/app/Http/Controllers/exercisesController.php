@@ -102,8 +102,10 @@ class exercisesController extends Controller
         ]);
     }
 
-    function getBinaryForm($string){
+    function getBinaryForm(Request $request){
+        $string = $request->string;
         $binaryForm = $string;
+
         //Get all the numbers from the string
         preg_match_all('!\d+!', $binaryForm, $matches);
 
@@ -118,7 +120,10 @@ class exercisesController extends Controller
         ]);
     }
 
-    function calculate($operand, $nums){
+    function calculate(Request $request){
+        $operand = $request->operand;
+        $nums = $request->nums;
+
         //Get the numbers and save them into an array
         $array = explode(" ", $nums);
         $result = 0;
