@@ -30,11 +30,13 @@ class exercisesController extends Controller
 
         $sortedNums = implode($numString);
 
+        $leftOverLower = $lowercaseString;
+
         for($i = 0; $i < count($lowercaseString); $i++){
             for($j = 0; $j < count($uppercaseString); $j++){
                 if(ord($lowercaseString[$i])%32 < ord($uppercaseString[$j]) %32){
                     $sortedString[] = $lowercaseString[$i];
-                    array_splice($lowercaseString, $i, 1);
+                    unset($leftOverLower[$i]);
                     break;
                 }
                 elseif(ord($lowercaseString[$i])%32 > ord($uppercaseString[$j]) %32){
@@ -44,19 +46,19 @@ class exercisesController extends Controller
                 else{
                     $sortedString[] = $lowercaseString[$i];
                     if(($i + 1) < count($lowercaseString) && ord($lowercaseString[$i+1])%32 == ord($uppercaseString[$j]) %32){
-                        array_splice($lowercaseString, $i, 1);
+                        unset($leftOverLower[$i]);
                         break;
                     }
                     $sortedString[] = $uppercaseString[$j];
-                    array_splice($lowercaseString, $i, 1);
+                    unset($leftOverLower[$i]);
                     array_splice($uppercaseString, $j, 1);
                     break;
                 }
             }
         }
 
-        for($i = 0; $i < count($lowercaseString); $i++){
-            $sortedString[] = $lowercaseString[$i];
+        foreach ($leftOverLower as $leftover) {
+            $sortedString[] = $leftover;
         }
 
         for($i = 0; $i < count($uppercaseString); $i++){
