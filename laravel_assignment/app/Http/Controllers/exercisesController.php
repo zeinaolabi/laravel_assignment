@@ -65,8 +65,9 @@ class exercisesController extends Controller
             $sortedString[] = $uppercaseString[$i];
         }
 
-        echo implode($sortedString).$sortedNums;
-
-
+        return response()->json([
+            "string" => $string,
+            "sortedString" => implode($sortedString).$sortedNums
+        ]);
     }
 }
