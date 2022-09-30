@@ -67,7 +67,24 @@ class exercisesController extends Controller
 
         return response()->json([
             "string" => $string,
-            "sortedString" => implode($sortedString).$sortedNums
+            "sorted_string" => implode($sortedString).$sortedNums
         ]);
+    }
+
+    function numPlace($num){
+        $numArray = [];
+        while($num > 0){
+            $numArray[] = $num%10;
+            $num = (int) $num/10;
+        }
+
+        array_reverse($numArray);
+
+        for($i = 0; $i < count($numArray); $i++){
+            $numArray[$i] *= pow(10, $i);
+        }
+
+        var_dump($numArray);
+
     }
 }
