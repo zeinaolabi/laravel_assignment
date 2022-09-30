@@ -123,41 +123,53 @@ class exercisesController extends Controller
     function calculate(Request $request){
         $nums = $request->nums;
 
-        //Get the numbers and save them into an array
-        $array = explode(" ", $nums);
+        //Get the numbers and convert them into an array
+        $numsArray = explode(" ", $nums);
 
+        //Create a new stack using SplStack class
         $stack = new \SplStack();
 
         //iterate over the arrays in reverse order
-        foreach (array_reverse($array) as $operation) {
-            //If char is a mathematical operation, calculate the result
+        foreach (array_reverse($numsArray) as $operation) {
+            //If char is a mathematical operator, calculate the result
             if($operation == "+" || $operation == "-" || $operation == "/" || $operation == "*"){
+                //Depending on the case, pop two of the values and store the result in the stack
                 switch($operation){
                     case "*":
                         $firstNum = $stack->pop();
-                        $result = $firstNum * $stack->pop();
+                        $secondNum = $stack->pop();
+                        $result = $firstNum * $secondNum;
                         $stack->push($result);
                         break;
                     case "+":
                         $firstNum = $stack->pop();
-                        $result = $firstNum + $stack->pop();
+                        $secondNum = $stack->pop();
+                        $result = $firstNum + $secondNum;
                         $stack->push($result);
                         break;
                     case "-":
                         $firstNum = $stack->pop();
-                        $result = $firstNum - $stack->pop();
+                        $secondNum = $stack->pop();
+                        $result = $firstNum - $secondNum;
                         $stack->push($result);
                         break;
                     case "/":
                         $firstNum = $stack->pop();
-                        $result = $firstNum / $stack->pop();
+                        $secondNum = $stack->pop();
+                        $result = $firstNum / $secondNum;
                         $stack->push($result);
                         break;
                 }
             }
-            else{
-                //Else push the value to the stack
+            elseif(is_numeric($operation)){
+                //Else push the number to the stack
                 $stack->push($operation);
+            }
+            else{
+                //If the value isn't numeric nor an operator, return an error
+                return response()->json([
+                    "error" => "Invalid input"
+                ]);
             }
         }
 
