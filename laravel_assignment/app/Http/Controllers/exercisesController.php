@@ -89,4 +89,12 @@ class exercisesController extends Controller
             "digits" => array_reverse($numArray)
         ]);
     }
+
+    function getBinaryForm($string){
+        preg_match_all('!\d+!', $string, $matches);
+        var_dump(decbin($matches[0][0]));
+
+    }
+
+
 }
