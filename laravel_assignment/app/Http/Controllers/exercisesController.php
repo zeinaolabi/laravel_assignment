@@ -74,14 +74,12 @@ class exercisesController extends Controller
     function numPlace($num){
         $numArray = [];
         $numClone = $num;
+        $counter = 0;
 
         while($numClone != 0){
-            $numArray[] = $numClone%10;
+            $numArray[] = $numClone%10 * pow(10, $counter);
             $numClone = (int) ($numClone/10);
-        }
-
-        for($i = 0; $i < count($numArray); $i++){
-            $numArray[$i] *= pow(10, $i);
+            $counter++;
         }
 
         return response()->json([
@@ -99,10 +97,43 @@ class exercisesController extends Controller
         }
 
         return response()->json([
-            "number" => $string,
-            "digits" => $binaryForm
+            "string" => $string,
+            "binary_form" => $binaryForm
         ]);
     }
 
+    function calculate($operand, $nums){
+        $array = explode(" ", $nums);
+        $result = 0;
+        switch($operand){
+            case "*":
+                $result = 1;
+                for($i = 0; $i < count($array); $i++){
+                    $result *= $array[$i];
+                }
+                break;
+            case "+":
+                for($i = 0; $i < count($array); $i++){
+                    $result += $array[$i];
+                }
+                break;
+            case "-":
+                for($i = 0; $i < count($array); $i++){
+                    $result -= $array[$i];
+                }
+                break;
+            case "/":
+                $result = 1;
+                for($i = 0; $i < count($array); $i++){
+                    $result /= $array[$i];
+                }
+                break;
+        }
 
+        return response()->json([
+            "operator" => $operand,
+            "numbers" => $array,
+            "solution" => $result
+        ]);
+    }
 }
