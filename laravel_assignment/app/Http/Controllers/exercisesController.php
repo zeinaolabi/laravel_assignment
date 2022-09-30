@@ -121,43 +121,49 @@ class exercisesController extends Controller
     }
 
     function calculate(Request $request){
-        $operand = $request->operand;
         $nums = $request->nums;
 
         //Get the numbers and save them into an array
         $array = explode(" ", $nums);
-        $result = 0;
 
-        //Depending on the operand, proceed with the calculations
-        switch($operand){
-            case "*":
-                $result = 1;
-                for($i = 0; $i < count($array); $i++){
-                    $result *= $array[$i];
+        $stack = new \SplStack();
+
+        //iterate over the arrays in reverse order
+        foreach (array_reverse($array) as $operation) {
+            //If char is a mathematical operation, calculate the result
+            if($operation == "+" || $operation == "-" || $operation == "/" || $operation == "*"){
+                switch($operation){
+                    case "*":
+                        $firstNum = $stack->pop();
+                        $result = $firstNum * $stack->pop();
+                        $stack->push($result);
+                        break;
+                    case "+":
+                        $firstNum = $stack->pop();
+                        $result = $firstNum + $stack->pop();
+                        $stack->push($result);
+                        break;
+                    case "-":
+                        $firstNum = $stack->pop();
+                        $result = $firstNum - $stack->pop();
+                        $stack->push($result);
+                        break;
+                    case "/":
+                        $firstNum = $stack->pop();
+                        $result = $firstNum / $stack->pop();
+                        $stack->push($result);
+                        break;
                 }
-                break;
-            case "+":
-                for($i = 0; $i < count($array); $i++){
-                    $result += $array[$i];
-                }
-                break;
-            case "-":
-                for($i = 0; $i < count($array); $i++){
-                    $result -= $array[$i];
-                }
-                break;
-            case "/":
-                $result = 1;
-                for($i = 0; $i < count($array); $i++){
-                    $result /= $array[$i];
-                }
-                break;
+            }
+            else{
+                //Else push the value to the stack
+                $stack->push($operation);
+            }
         }
 
         return response()->json([
-            "operator" => $operand,
-            "numbers" => $array,
-            "solution" => $result
+            "formula" => $nums,
+            "solution" => $stack->top()
         ]);
     }
 }
