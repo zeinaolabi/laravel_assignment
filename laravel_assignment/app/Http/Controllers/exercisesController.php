@@ -73,18 +73,20 @@ class exercisesController extends Controller
 
     function numPlace($num){
         $numArray = [];
-        while($num > 0){
-            $numArray[] = $num%10;
-            $num = (int) $num/10;
-        }
+        $numClone = $num;
 
-        array_reverse($numArray);
+        while($numClone != 0){
+            $numArray[] = $numClone%10;
+            $numClone = (int) ($numClone/10);
+        }
 
         for($i = 0; $i < count($numArray); $i++){
             $numArray[$i] *= pow(10, $i);
         }
 
-        var_dump($numArray);
-
+        return response()->json([
+            "number" => $num,
+            "digits" => array_reverse($numArray)
+        ]);
     }
 }
